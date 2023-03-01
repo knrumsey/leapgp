@@ -1,0 +1,16 @@
+Package: leapgp
+Type: Package
+Title: Localized Ensemble of Approximate Gaussian Processes
+Version: 1.0.0
+Author: Kellin Rumsey [aut, cre]
+Maintainer: Kellin Rumsey <knrumsey@lanl.gov>
+Description: An emulator designed for rapid sequential emulation (e.g., MCMC applications). Works via extension
+    of the laGP approach by Gramacy and Apley (2015). 
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Imports: laGP, RANN, cluster
+Suggests: knitr, rmarkdown, testthat, lhs, tictoc, RColorBrewer
+NeedsCompilation: no
+VignetteBuilder: knitr
