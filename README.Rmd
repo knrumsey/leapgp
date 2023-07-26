@@ -8,7 +8,12 @@ output: github_document
 `r badger::badge_devel("knrumsey/leapgp", "purple")`
 
 
- 
+```{r, eval=TRUE, echo=FALSE, fig.cap="This logo was designed by Imagine AI Art Studio", out.width='40%'}
+knitr::include_graphics("inst/logos/LEAPGP.png")
+```
+
+
+### Description 
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 

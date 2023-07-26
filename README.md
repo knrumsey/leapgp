@@ -5,6 +5,17 @@ leapgp
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![](https://img.shields.io/badge/devel%20version-1.0.0-purple.svg)](https://github.com/knrumsey/leapgp)
 
+<div class="figure">
+
+<img src="inst/logos/LEAPGP.png" alt="This logo was designed by Imagine AI Art Studio" width="40%" />
+<p class="caption">
+This logo was designed by Imagine AI Art Studio
+</p>
+
+</div>
+
+### Description
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 `leapgp` is an R package designed for fast sequential emulation of
