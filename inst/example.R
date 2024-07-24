@@ -47,7 +47,6 @@ for(i in 1:1000){
   pred[i] <- mod$mean
 }
 
-
 # TEST CHUNK PREDICTION (NOT THE INTENDED USECASE)
 mod <- leapGP(X, y, M0=30)
 mod <- predict_leapGP(mod, Xtest, rho=0.95)

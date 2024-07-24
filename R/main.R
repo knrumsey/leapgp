@@ -1,21 +1,26 @@
 #' Localized Ensemble of Approximate Gaussian Processes
 #'
-#' This function is a modification of the laGP framework of Gramacy and Apley
-#' designed for cases where parallel predictions are not possible (e.g. MCMC).
-#' The leapGP offers a quadratic training algorithm which leads to fast predictions.
+#' Function to train or initialize a leapGP model, as described in Rumsey et al. (2023).
 #'
 #' @param X a matrix of training locations (1 row for each training instance)
-#' @param y a vector of training responses (length(y) == nrow(X))
-#' @param M0 the number of prediction hubs desired. Defaults to ceiling(sqrt(length(Y))).
-#' @param rho (optional). The parameter controlling time-accuracy tradeoff. Can alternatively be specified during prediction.
+#' @param y a vector of training responses (\code{length(y)} should equal \code{nrow(X)})
+#' @param M0 the number of prediction hubs desired. Defaults to \code{ceiling(sqrt(length(Y)))}.
+#' @param rho (optional). The parameter controlling time-accuracy tradeoff. Can also be specified during prediction.
 #' @param scale logical. Do we want the scale parameter to be returned for predictions? If TRUE,
-#'            the matrix K^{-1} will be stored for each hub.
+#'            the matrix \eqn{K^{-1}} will be stored for each hub.
 #' @param n local neighborhood size (for laGP)
 #' @param start number of starting points for neighborhood (between 6 and n inclusive)
 #' @param verbose  logical. Should status be printed? Deault is FALSE
 #' @param justdoit logical. Force leapGP to run using specified parameters (may take a long time and/or cause R to crash).
-#' @param ... optional arguments to be passed to laGP()
-#' @return a univariate prediction and an updated list of hubs. Also returns scale parameter if scale=TRUE
+#' @param ... optional arguments to be passed to \code{laGP()}
+#' @return an object of class \code{leapGP} with fields \code{X}, \code{y}, and \code{hubs}.  Also returns scale parameter if \code{scale=TRUE}
+#' @details The leapGP is extends the laGP framework of Gramacy & Apley (2015). The methods are equivalent for \code{rho=1},
+#'          but leapGP trades memory for speed when \code{rho < 1}. The method is described in Rumsey et al. (2023) where they demonstrate
+#'          that leapGP is faster than laGP for sequential predictions and is also generally more accurate for some settings of \code{rho}.
+#' @references
+#' Gramacy, R. B., & Apley, D. W. (2015). Local Gaussian process approximation for large computer experiments. Journal of Computational and Graphical Statistics, 24(2), 561-578.
+#'
+#' Rumsey, K. N., Huerta, G., & Derek Tucker, J. (2023). A localized ensemble of approximate Gaussian processes for fast sequential emulation. Stat, 12(1), e576.
 #' @examples
 #' # Generate data
 #' f <- function(x){
@@ -48,6 +53,7 @@ leapGP <- function(X, y,
                    justdoit = FALSE, ...){
   if(M0 == 0){
     out <- list(X=X, y=y, hubs=list())
+    class(out) <- "leapGP"
     return(out)
   }
 
@@ -119,22 +125,28 @@ leapGP <- function(X, y,
 }
 
 
-#' Predict metthod for leapGP class
+#' Predict Method for leapGP
 #'
-#' This function is a modification of the LA-GP framework of Gramacy and Apley
-#' designed for cases where parallel predictions are not possible (i.e. MCMC).
-#' The slapGP framework offers users a time-accuracy tradeoff based on the rho parameter.
+#' Predict method for an object of class leapGP.
+#' Returns a (possibly modified) leapGP object as well as a prediction (with uncertainty, if requested).
 #'
-#' @param object An object of class `leapGP`
+#' @param object An object of class \code{leapGP}
 #' @param newdata New data
-#' @param rho parameter controlling time-accuracy tradeoff (default = 0.95)
+#' @param rho parameter controlling time-accuracy tradeoff (default is \code{rho=0.95})
 #' @param scale logical. Do we want the scale parameter to be returned for predictions? If TRUE,
-#'            the matrix K^{-1} will be stored for each hub.
+#'            the matrix \eqn{K^{-1}} will be stored for each hub.
 #' @param n local neighborhood size
 #' @param start number of starting points for neighborhood (between 6 and n inclusive)
 #' @param M_max the maximum number of hubs allowed (used to upper bound the run time)
-#' @param ... optional arguments to be passed to laGP()
-#' @return A list containing values `mean`, `hubs` `X` and `y`. If `scale=TRUE` the list also contains field `sd`.
+#' @param ... optional arguments to be passed to \code{laGP()}
+#' @return A list containing values \code{mean}, \code{hubs} \code{X} and \code{y}. If \code{scale=TRUE} the list also contains field \code{sd}.
+#' @details The leapGP is extends the laGP framework of Gramacy & Apley (2015). The methods are equivalent for \code{rho=1},
+#'          but leapGP trades memory for speed when \code{rho < 1}. The method is described in Rumsey et al. (2023) where they demonstrate
+#'          that leapGP is faster than laGP for sequential predictions and is also generally more accurate for some settings of \code{rho}.
+#' @references
+#' Gramacy, R. B., & Apley, D. W. (2015). Local Gaussian process approximation for large computer experiments. Journal of Computational and Graphical Statistics, 24(2), 561-578.
+#'
+#' Rumsey, K. N., Huerta, G., & Derek Tucker, J. (2023). A localized ensemble of approximate Gaussian processes for fast sequential emulation. Stat, 12(1), e576.
 #' @examples
 #' # Generate data
 #' f <- function(x){
@@ -188,6 +200,7 @@ predict_leapGP <- function(object, newdata, rho=0.95,
     }
     out <- list(hubs=hubs, X=X, y=y, mean=mean)
     if(scale) out$sd <- sd
+    class(out) <- "leapGP"
     return(out)
   }
 
@@ -195,11 +208,11 @@ predict_leapGP <- function(object, newdata, rho=0.95,
     out <- leap_pred_adapt(object, newdata, rho, scale, n, start, M_max, ...)
   }else{
     if(is.null(object$hubs[[1]]$epsilon)){
-
       out <- leap_pred_no_adapt_convert(object, newdata, scale, ...)
     }else{
       out <- leap_pred_no_adapt(object, newdata, scale, ...)
     }
   }
+  class(out) <- "leapGP"
   return(out)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/main.R
 \name{predict_leapGP}
 \alias{predict_leapGP}
-\title{Predict metthod for leapGP class}
+\title{Predict Method for leapGP}
 \usage{
 predict_leapGP(
   object,
@@ -16,14 +16,14 @@ predict_leapGP(
 )
 }
 \arguments{
-\item{object}{An object of class `leapGP`}
+\item{object}{An object of class \code{leapGP}}
 
 \item{newdata}{New data}
 
-\item{rho}{parameter controlling time-accuracy tradeoff (default = 0.95)}
+\item{rho}{parameter controlling time-accuracy tradeoff (default is \code{rho=0.95})}
 
 \item{scale}{logical. Do we want the scale parameter to be returned for predictions? If TRUE,
-the matrix K^{-1} will be stored for each hub.}
+the matrix \eqn{K^{-1}} will be stored for each hub.}
 
 \item{n}{local neighborhood size}
 
@@ -31,15 +31,19 @@ the matrix K^{-1} will be stored for each hub.}
 
 \item{M_max}{the maximum number of hubs allowed (used to upper bound the run time)}
 
-\item{...}{optional arguments to be passed to laGP()}
+\item{...}{optional arguments to be passed to \code{laGP()}}
 }
 \value{
-A list containing values `mean`, `hubs` `X` and `y`. If `scale=TRUE` the list also contains field `sd`.
+A list containing values \code{mean}, \code{hubs} \code{X} and \code{y}. If \code{scale=TRUE} the list also contains field \code{sd}.
 }
 \description{
-This function is a modification of the LA-GP framework of Gramacy and Apley
-designed for cases where parallel predictions are not possible (i.e. MCMC).
-The slapGP framework offers users a time-accuracy tradeoff based on the rho parameter.
+Predict method for an object of class leapGP.
+Returns a (possibly modified) leapGP object as well as a prediction (with uncertainty, if requested).
+}
+\details{
+The leapGP is extends the laGP framework of Gramacy & Apley (2015). The methods are equivalent for \code{rho=1},
+         but leapGP trades memory for speed when \code{rho < 1}. The method is described in Rumsey et al. (2023) where they demonstrate
+         that leapGP is faster than laGP for sequential predictions and is also generally more accurate for some settings of \code{rho}.
 }
 \examples{
 # Generate data
@@ -62,4 +66,9 @@ for(i in 1:100){
   mod <- predict_leapGP(mod, matrix(Xtest[i,], nrow=1), rho=0.9)
   pred[i] <- mod$mean
 }
+}
+\references{
+Gramacy, R. B., & Apley, D. W. (2015). Local Gaussian process approximation for large computer experiments. Journal of Computational and Graphical Statistics, 24(2), 561-578.
+
+Rumsey, K. N., Huerta, G., & Derek Tucker, J. (2023). A localized ensemble of approximate Gaussian processes for fast sequential emulation. Stat, 12(1), e576.
 }

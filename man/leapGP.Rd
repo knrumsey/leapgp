@@ -20,14 +20,14 @@ leapGP(
 \arguments{
 \item{X}{a matrix of training locations (1 row for each training instance)}
 
-\item{y}{a vector of training responses (length(y) == nrow(X))}
+\item{y}{a vector of training responses (\code{length(y)} should equal \code{nrow(X)})}
 
-\item{M0}{the number of prediction hubs desired. Defaults to ceiling(sqrt(length(Y))).}
+\item{M0}{the number of prediction hubs desired. Defaults to \code{ceiling(sqrt(length(Y)))}.}
 
-\item{rho}{(optional). The parameter controlling time-accuracy tradeoff. Can alternatively be specified during prediction.}
+\item{rho}{(optional). The parameter controlling time-accuracy tradeoff. Can also be specified during prediction.}
 
 \item{scale}{logical. Do we want the scale parameter to be returned for predictions? If TRUE,
-the matrix K^{-1} will be stored for each hub.}
+the matrix \eqn{K^{-1}} will be stored for each hub.}
 
 \item{n}{local neighborhood size (for laGP)}
 
@@ -37,15 +37,18 @@ the matrix K^{-1} will be stored for each hub.}
 
 \item{justdoit}{logical. Force leapGP to run using specified parameters (may take a long time and/or cause R to crash).}
 
-\item{...}{optional arguments to be passed to laGP()}
+\item{...}{optional arguments to be passed to \code{laGP()}}
 }
 \value{
-a univariate prediction and an updated list of hubs. Also returns scale parameter if scale=TRUE
+an object of class \code{leapGP} with fields \code{X}, \code{y}, and \code{hubs}.  Also returns scale parameter if \code{scale=TRUE}
 }
 \description{
-This function is a modification of the laGP framework of Gramacy and Apley
-designed for cases where parallel predictions are not possible (e.g. MCMC).
-The leapGP offers a quadratic training algorithm which leads to fast predictions.
+Function to train or initialize a leapGP model, as described in Rumsey et al. (2023).
+}
+\details{
+The leapGP is extends the laGP framework of Gramacy & Apley (2015). The methods are equivalent for \code{rho=1},
+         but leapGP trades memory for speed when \code{rho < 1}. The method is described in Rumsey et al. (2023) where they demonstrate
+         that leapGP is faster than laGP for sequential predictions and is also generally more accurate for some settings of \code{rho}.
 }
 \examples{
 # Generate data
@@ -68,4 +71,9 @@ for(i in 1:100){
   mod <- predict_leapGP(mod, matrix(Xtest[i,], nrow=1), rho=0.9)
   pred[i] <- mod$mean
 }
+}
+\references{
+Gramacy, R. B., & Apley, D. W. (2015). Local Gaussian process approximation for large computer experiments. Journal of Computational and Graphical Statistics, 24(2), 561-578.
+
+Rumsey, K. N., Huerta, G., & Derek Tucker, J. (2023). A localized ensemble of approximate Gaussian processes for fast sequential emulation. Stat, 12(1), e576.
 }

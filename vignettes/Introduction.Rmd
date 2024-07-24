@@ -75,9 +75,8 @@ for(i in 1:50){
 }
 toc()
 plot(pred1, ytest, main=paste("RMSE = ", round(sqrt(mean((pred1-ytest)^2)), 4)))
-
+abline(0, 1)
 ```
-
 
 ## leapgp without Training Step
 It is possible to skip the training step for the `leapgp` algorithm. To do this, we simply initialize an empty model with
