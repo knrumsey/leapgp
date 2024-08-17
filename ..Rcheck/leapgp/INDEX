@@ -1,0 +1,3 @@
+leapGP                  Localized Ensemble of Approximate Gaussian
+                        Processes
+predict_leapGP          Predict Method for leapGP

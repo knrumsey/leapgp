@@ -7,6 +7,15 @@ output: github_document
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 `r badger::badge_devel("knrumsey/leapgp", "purple")`
 
+## Update (August 2024)
+
+The `leapgp` R package is now available on CRAN and can be installed as follows.
+
+```{R, eval=FALSE}
+install.packages("leapgp")
+library(leapgp)
+```
+
 
 ```{r, eval=TRUE, echo=FALSE, fig.cap="This logo was designed by Imagine AI Art Studio", out.width='40%'}
 knitr::include_graphics("inst/logos/LEAPGP.png")

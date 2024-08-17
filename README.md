@@ -5,6 +5,16 @@ leapgp
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![](https://img.shields.io/badge/devel%20version-1.0.0-purple.svg)](https://github.com/knrumsey/leapgp)
 
+## Update (August 2024)
+
+The `leapgp` R package is now available on CRAN and can be installed as
+follows.
+
+``` r
+install.packages("leapgp")
+library(leapgp)
+```
+
 <div class="figure">
 
 <img src="inst/logos/LEAPGP.png" alt="This logo was designed by Imagine AI Art Studio" width="40%" />
